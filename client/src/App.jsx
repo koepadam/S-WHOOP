@@ -1,32 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Papa from 'papaparse';
 
-//! COMPONENT IMPORTING
 import Navbar from './components/Navbar/Navbar';
 import ImportForm from './components/InputForm/InputForm';
 
 import './App.css';
 
 function App() {
-  const [csvFiles, setCsvFiles] = useState([]);
+  const [parsedData, setParsedData] = useState({}); // { filename: parsedRows }
 
   const handleFolderSubmit = (files) => {
-    // TODO CHANGE
-    setCsvFiles(files);
-    console.log('CSV files submitted:', files);
+    files.forEach((file) => {
+      Papa.parse(file, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const parsedRows = results.data;
 
+          // first 5 rows for check
+          console.log(
+            ` ${file.name} — First 5 rows:`,
+            parsedRows.slice(0, 5)
+          );
 
-    // const parsedFile = {}; 
-
-    // files.forEach((file) => {
-    //   Papa.parse(file, {
-
-    //   })
-    //   })
-
-
-
+          // Saving full  data for charting
+          setParsedData((prev) => ({
+            ...prev,
+            [file.name]: parsedRows,
+          }));
+        },
+        error: (err) => {
+          console.error(`❌ Error parsing ${file.name}:`, err);
+        },
+      });
+    });
   };
+
+  useEffect(() => {
+    if (parsedData['sleeps.csv']) {
+      console.log('full sleeps data:', parsedData['sleeps.csv']);
+    }
+  }, [parsedData]);
 
   return (
     <div className="flex min-h-screen bg-white text-gray-900">
@@ -39,4 +54,3 @@ function App() {
 }
 
 export default App;
-
