@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import Papa from 'papaparse';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar/Navbar';
 import ImportForm from './components/InputForm/InputForm';
+import Dashboard from './components/Dashboard/Dashboard';
 
 import './App.css';
 
@@ -19,10 +21,7 @@ function App() {
           const parsedRows = results.data;
 
           // first 5 rows for check
-          console.log(
-            ` ${file.name} — First 5 rows:`,
-            parsedRows.slice(0, 5)
-          );
+          console.log(` ${file.name} — First 5 rows:`, parsedRows.slice(0, 5));
 
           // Saving full  data for charting
           setParsedData((prev) => ({
@@ -44,12 +43,23 @@ function App() {
   }, [parsedData]);
 
   return (
-    <div className="flex min-h-screen bg-white text-gray-900">
-      <Navbar />
-      <main className="ml-32 p-10 w-full">
-        <ImportForm onFolderSubmit={handleFolderSubmit} />
-      </main>
-    </div>
+    <Router>
+      <div className="flex min-h-screen bg-white text-gray-900">
+        <Navbar />
+        <main className="ml-40 p-10 w-full">
+          <Routes>
+            <Route
+              path="/"
+              element={<ImportForm onFolderSubmit={handleFolderSubmit} />}
+            />
+            <Route
+              path="/dashboard"
+              element={<Dashboard parsedData={parsedData} />}
+            />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 

@@ -1,4 +1,5 @@
-import whoopLogo from '../../assets/whoop-logo.png'
+import whoopLogo from '../../assets/whoop-logo.png';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
@@ -8,9 +9,21 @@ export default function Navbar() {
           <img src={whoopLogo} alt="WHOOP logo" className="h-8" />
         </div>
         <ul className="space-y-2 text-sm font-medium">
-          <li><a href="#dashboard" className="hover:text-indigo-500">Dashboard</a></li>
-          <li><a href="#import" className="hover:text-indigo-500">Import</a></li>
-          <li><a href="#about" className="hover:text-indigo-500">About</a></li>
+          <li>
+            <Link to="/dashboard" className="hover:text-indigo-500">
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link to="/" className="hover:text-indigo-500">
+              Import
+            </Link>
+          </li>
+          <li>
+            <Link to="/about" className="hover:text-indigo-500">
+              About
+            </Link>
+          </li>
         </ul>
       </div>
 
@@ -20,7 +33,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
-
-
-
