@@ -48,14 +48,10 @@ export default function SleepChart({ data }) {
     startDate = new Date(now.getFullYear() - 1, 0, 1);
   } else if (range === '5y') {
     startDate = new Date(now.getFullYear() - 4, 0, 1);
-  } else {
-    startDate = new Date(now.getFullYear(), 0, 1);
   }
 
   const filtered = data.filter((row) => {
     const raw = row['Cycle start time'];
-    const score = row['Sleep performance %'];
-    if (!raw || score === undefined) return false;
 
     const date = new Date(raw);
     return date >= startDate && date <= now;
@@ -63,20 +59,20 @@ export default function SleepChart({ data }) {
 
   const dates = filtered.map((row) => {
     const date = new Date(row['Cycle start time']);
-    return date.toLocaleDateString('en-GB').replace(/\//g, '-');
+    return date.toLocaleDateString('en-GB');
   });
 
   const sleepScores = filtered.map(
-    (row) => Number(row['Sleep performance %']) || 0
+    (row) => Number(row['Sleep performance %']) 
   );
   const asleepDurations = filtered.map(
-    (row) => Number(row['Asleep duration (min)']) || 0
+    (row) => Number(row['Asleep duration (min)']) 
   );
   const efficiency = filtered.map(
-    (row) => Number(row['Sleep efficiency %']) || 0
+    (row) => Number(row['Sleep efficiency %']) 
   );
   const consistency = filtered.map(
-    (row) => Number(row['Sleep consistency %']) || 0
+    (row) => Number(row['Sleep consistency %']) 
   );
 
   const avgSleepDuration =
@@ -89,7 +85,6 @@ export default function SleepChart({ data }) {
     borderWidth: 1,
     borderDash: [5, 5],
     pointRadius: 0,
-    yAxisID: 'y2',
   };
 
   const chartData = {
@@ -141,7 +136,7 @@ export default function SleepChart({ data }) {
     plugins: {
       legend: { position: 'top' },
       title: { display: true, text: 'Sleep Metrics Over Time' },
-      tooltip: {
+      tooltip: { // ! used AI here for the tooltip information
         callbacks: {
           label: function (tooltipItem) {
             const label = tooltipItem.dataset.label;
@@ -165,10 +160,9 @@ export default function SleepChart({ data }) {
       y2: {
         beginAtZero: true,
         position: 'right',
-        grid: { drawOnChartArea: false },
         title: { display: true, text: 'Sleep Duration' },
-        ticks: {
-          stepSize: 60, // force 1-hour intervals
+        ticks: { 
+          stepSize: 60,
           callback: function (value) {
             const hours = Math.floor(value / 60);
             return `${hours}h`;
@@ -182,14 +176,14 @@ export default function SleepChart({ data }) {
 
   return (
     <div className="mb-10">
-      <h2 className="text-xl font-semibold mb-4">🛌 Sleep Trends</h2>
+      <h2 className="text-xl font-semibold mb-4"> Sleep Trends</h2>
 
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-3 mb-8">
         {ranges.map((label) => (
           <button
             key={label}
             onClick={() => setRange(label)}
-            className={`px-3 py-1 rounded ${
+            className={`px-5 py-1 rounded ${
               range === label
                 ? 'bg-indigo-500 text-white'
                 : 'bg-indigo-100 hover:bg-indigo-200'
@@ -200,13 +194,7 @@ export default function SleepChart({ data }) {
         ))}
       </div>
 
-      {sleepScores.length ? (
-        <Line data={chartData} options={options} />
-      ) : (
-        <p className="text-sm text-gray-500">
-          No sleep data available to chart.
-        </p>
-      )}
+      <Line data={chartData} options={options} />
     </div>
   );
 }

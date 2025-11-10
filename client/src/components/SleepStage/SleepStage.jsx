@@ -19,6 +19,8 @@ ChartJS.register(
   Legend
 );
 
+
+
 export default function SleepStage({ data }) {
   const [range, setRange] = useState('1y');
 
@@ -55,15 +57,15 @@ export default function SleepStage({ data }) {
 
   const dates = filtered.map((row) => {
     const date = new Date(row['Cycle start time']);
-    return date.toLocaleDateString('en-GB').replace(/\//g, '-');
+    return date.toLocaleDateString('en-GB');
   });
 
-  const light = filtered.map((row) => row['Light sleep duration (min)'] || 0);
-  const deep = filtered.map((row) => row['Deep (SWS) duration (min)'] || 0);
-  const rem = filtered.map((row) => row['REM duration (min)'] || 0);
-  const awake = filtered.map((row) => row['Awake duration (min)'] || 0);
+  const light = filtered.map((row) => row['Light sleep duration (min)']);
+  const deep = filtered.map((row) => row['Deep (SWS) duration (min)']);
+  const rem = filtered.map((row) => row['REM duration (min)']);
+  const awake = filtered.map((row) => row['Awake duration (min)']);
   const asleepDurations = filtered.map(
-    (row) => row['Asleep duration (min)'] || 0
+    (row) => row['Asleep duration (min)']
   );
 
   const chartData = {
@@ -101,7 +103,7 @@ export default function SleepStage({ data }) {
     plugins: {
       legend: { position: 'top' },
       title: { display: true, text: 'Sleep Stage Breakdown' },
-      tooltip: {
+      tooltip: { // ! did use Ai here for the tooltip information showing specific sleep and total sleep
         callbacks: {
           label: function (tooltipItem) {
             const value = tooltipItem.raw;
@@ -125,7 +127,7 @@ export default function SleepStage({ data }) {
 
   return (
     <div className="mb-10">
-      <h2 className="text-xl font-semibold mb-4">🧠 Sleep Architecture</h2>
+      <h2 className="text-xl font-semibold mb-4">Sleep Structure</h2>
       <div className="flex flex-wrap gap-2 mb-6">
         {ranges.map((label) => (
           <button
