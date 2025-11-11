@@ -44,9 +44,9 @@ function App() {
 
   return (
     <Router>
-      <div className="flex min-h-screen bg-white text-gray-900">
+      <div className="flex min-h-screen bg-white text-gray-900 m-0">
         <Navbar />
-        <main className="ml-40 p-10 w-full bg-gray-50 min-h-screen text-gray-900">
+        <main className="w-full bg-gray-900 min-h-screen text-gray-900">
           <Routes>
             <Route
               path="/"

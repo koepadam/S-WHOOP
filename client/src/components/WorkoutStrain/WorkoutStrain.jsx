@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -42,23 +37,39 @@ export default function WorkoutStrain({ data }) {
   });
 
   const calorieBins = [0, 200, 400, 600, 800, Infinity];
-  const labels = ['<200 Calories', '200-399 Calories', '400-599 Calories', '600-799 Calories', '800+ Calories'];
+  const labels = [
+    '<200 Calories',
+    '200-399 Calories',
+    '400-599 Calories',
+    '600-799 Calories',
+    '800+ Calories',
+  ];
   const counts = new Array(labels.length).fill(0);
 
   filtered.forEach((row) => {
     const cal = Number(row['Energy burned (cal)']);
-    const index = calorieBins.findIndex((bin, i) => cal >= bin && cal < calorieBins[i + 1]);
+    const index = calorieBins.findIndex(
+      (bin, i) => cal >= bin && cal < calorieBins[i + 1]
+    );
     if (index !== -1) counts[index]++;
   });
 
   const total = counts.reduce((sum, val) => sum + val, 0);
 
   const chartData = {
-    labels: labels.map((label, i) => `${label} (${((counts[i] / total) * 100).toFixed(1)}%)`),
+    labels: labels.map(
+      (label, i) => `${label} (${((counts[i] / total) * 100).toFixed(1)}%)`
+    ),
     datasets: [
       {
         data: counts,
-        backgroundColor: ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa'],
+        backgroundColor: [
+          '#f87171',
+          '#fbbf24',
+          '#34d399',
+          '#60a5fa',
+          '#a78bfa',
+        ],
         borderWidth: 1,
       },
     ],
@@ -66,10 +77,32 @@ export default function WorkoutStrain({ data }) {
 
   const options = {
     maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'bottom' },
-    },
     cutout: '60%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: '#e5e7eb',
+        },
+      },
+      title: {
+        display: true,
+        text: 'Workout Strain Distribution',
+        color: '#e5e7eb',
+      },
+      tooltip: {
+        backgroundColor: '#1f2937',
+        titleColor: '#f9fafb',
+        bodyColor: '#f3f4f6',
+        callbacks: {
+          label: function (tooltipItem) {
+            const label = tooltipItem.label || '';
+            const value = tooltipItem.raw;
+            return `${label}: ${value} workouts`;
+          },
+        },
+      },
+    },
   };
 
   const ranges = ['1m', '3m', '6m', '1y', '2y', '5y'];
@@ -83,10 +116,10 @@ export default function WorkoutStrain({ data }) {
           <button
             key={label}
             onClick={() => setRange(label)}
-            className={`px-3 py-1 rounded ${
+            className={`px-3 py-1 rounded transition-colors ${
               range === label
-                ? 'bg-red-500 text-white'
-                : 'bg-red-100 hover:bg-red-200'
+                ? 'bg-red-500 text-white ring-2 ring-red-300'
+                : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
             }`}
           >
             {label.toUpperCase()}
@@ -94,7 +127,7 @@ export default function WorkoutStrain({ data }) {
         ))}
       </div>
 
-      <p className="text-center text-sm text-gray-600 mb-2">
+      <p className="text-center text-sm text-gray-300 mb-2">
         Total Workouts: {total}
       </p>
 

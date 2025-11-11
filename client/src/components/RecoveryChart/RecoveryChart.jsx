@@ -24,36 +24,45 @@ ChartJS.register(
 export default function RecoveryTrend({ data }) {
   const [range, setRange] = useState('1y');
   const [selectedMonth, setSelectedMonth] = useState(null);
-  
+
+  // getting start date on range
+  function getStartDate(range) {
+    const now = new Date();
+    const start = new Date(now);
+
+    switch (range) {
+      case '1m':
+        start.setMonth(now.getMonth() - 1);
+        break;
+      case '3m':
+        start.setMonth(now.getMonth() - 3);
+        break;
+      case '6m':
+        start.setMonth(now.getMonth() - 6);
+        break;
+      case '1y':
+        return new Date(now.getFullYear(), 0, 1);
+      case '2y':
+        return new Date(now.getFullYear() - 1, 0, 1);
+      case '5y':
+        return new Date(now.getFullYear() - 4, 0, 1);
+      default:
+        return start;
+    }
+    return start;
+  }
 
   let startDate, endDate;
 
+  //manual month selection
   if (selectedMonth) {
     startDate = new Date(`${selectedMonth}-01`);
     endDate = new Date(startDate);
     endDate.setMonth(startDate.getMonth() + 1);
   } else {
-    endDate = new Date(); // default to now
-
-    if (range === '1m') {
-      startDate = new Date(endDate);
-      startDate.setMonth(endDate.getMonth() - 1);
-    } else if (range === '3m') {
-      startDate = new Date(endDate);
-      startDate.setMonth(endDate.getMonth() - 3);
-    } else if (range === '6m') {
-      startDate = new Date(endDate);
-      startDate.setMonth(endDate.getMonth() - 6);
-    } else if (range === '1y') {
-      startDate = new Date(endDate.getFullYear(), 0, 1);
-    } else if (range === '2y') {
-      startDate = new Date(endDate.getFullYear() - 1, 0, 1);
-    } else if (range === '5y') {
-      startDate = new Date(endDate.getFullYear() - 4, 0, 1);
-    }
+    endDate = new Date();
+    startDate = getStartDate(range);
   }
-
-  // TODO
 
   const filtered = data.filter((row) => {
     const raw = row['Cycle start time'];
@@ -63,25 +72,17 @@ export default function RecoveryTrend({ data }) {
     return date >= startDate && date <= endDate;
   });
 
-  const dates = filtered.map((row) => {
-    const date = new Date(row['Cycle start time'].trim());
-    return date.toLocaleDateString('en-GB'); // dd/mm/yyyy
-  });
-
+  
+  const dates = filtered.map((row) =>
+    new Date(row['Cycle start time'].trim()).toLocaleDateString('en-GB')
+  );
   const scores = filtered.map((row) => Number(row['Recovery score %']) || 0);
-  const sleepScores = filtered.map(
-    (row) => Number(row['Sleep performance %']) || 0
-  );
-  const hrv = filtered.map(
-    (row) => Number(row['Heart rate variability (ms)']) || 0
-  );
-  const rhr = filtered.map(
-    (row) => Number(row['Resting heart rate (bpm)']) || 0
-  );
-  const consistency = filtered.map(
-    (row) => Number(row['Sleep consistency %']) || 0
-  );
+  const sleepScores = filtered.map((row) => Number(row['Sleep performance %']) || 0);
+  const hrv = filtered.map((row) => Number(row['Heart rate variability (ms)']) || 0);
+  const rhr = filtered.map((row) => Number(row['Resting heart rate (bpm)']) || 0);
+  const consistency = filtered.map((row) => Number(row['Sleep consistency %']) || 0);
 
+  // ✅ Chart data
   const chartData = {
     labels: dates,
     datasets: [
@@ -106,7 +107,7 @@ export default function RecoveryTrend({ data }) {
       {
         label: 'Resting Heart Rate (bpm)',
         data: rhr,
-        borderColor: '#f87171', 
+        borderColor: '#f87171',
         backgroundColor: 'rgba(248,113,113,0.2)',
         tension: 0.4,
         pointRadius: 2,
@@ -116,12 +117,25 @@ export default function RecoveryTrend({ data }) {
     ],
   };
 
+  // ✅ Chart options
   const options = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Recovery Score Over Time' },
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#e5e7eb',
+        },
+      },
+      title: {
+        display: true,
+        text: 'Recovery Score Over Time',
+        color: '#e5e7eb',
+      },
       tooltip: {
+        backgroundColor: '#1f2937',
+        titleColor: '#f9fafb',
+        bodyColor: '#f3f4f6',
         callbacks: {
           label: () => '',
           afterBody: function (tooltipItems) {
@@ -141,21 +155,37 @@ export default function RecoveryTrend({ data }) {
       y: {
         beginAtZero: true,
         max: 100,
-        title: { display: true, text: '%' },
+        ticks: { color: '#d1d5db' },
+        grid: { color: '#374151' },
+        title: {
+          display: true,
+          text: '%',
+          color: '#d1d5db',
+        },
       },
       y2: {
         beginAtZero: false,
         position: 'right',
-        title: { display: true, text: 'Resting Heart Rate (bpm)' },
         ticks: {
           stepSize: 5,
+          color: '#d1d5db',
           callback: (val) => `${val} bpm`,
         },
         grid: { drawOnChartArea: false },
+        title: {
+          display: true,
+          text: 'Resting Heart Rate (bpm)',
+          color: '#d1d5db',
+        },
       },
-
       x: {
-        title: { display: true, text: 'Date' },
+        ticks: { color: '#d1d5db' },
+        grid: { color: '#374151' },
+        title: {
+          display: true,
+          text: 'Date',
+          color: '#d1d5db',
+        },
       },
     },
   };
@@ -164,14 +194,15 @@ export default function RecoveryTrend({ data }) {
 
   return (
     <div className="mb-10">
-      <h2 className="text-xl font-semibold mb-4">Recovery Trends</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-100">Recovery Trends</h2>
 
+      {/* ✅ Range and month selector */}
       <div className="flex flex-wrap gap-3 mb-8">
         <input
           type="month"
           value={selectedMonth || ''}
           onChange={(e) => setSelectedMonth(e.target.value)}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 rounded bg-gray-800 text-gray-100 border border-gray-600"
         />
 
         {ranges.map((label) => (
@@ -179,12 +210,12 @@ export default function RecoveryTrend({ data }) {
             key={label}
             onClick={() => {
               setRange(label);
-              setSelectedMonth(null); //  reset month
+              setSelectedMonth(null); // clear manual month selection
             }}
-            className={`px-5 py-1 rounded ${
+            className={`px-5 py-1 rounded transition-colors ${
               range === label
-                ? 'bg-green-500 text-white'
-                : 'bg-green-100 hover:bg-green-200'
+                ? 'bg-green-500 text-white ring-2 ring-green-300'
+                : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
             }`}
           >
             {label.toUpperCase()}

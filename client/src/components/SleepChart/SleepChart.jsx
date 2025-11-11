@@ -131,7 +131,7 @@ export default function SleepChart({ data }) {
       legend: {
         position: 'top',
         labels: {
-          color: '#e5e7eb', // Tailwind gray-200
+          color: '#e5e7eb', 
         },
       },
       title: {
@@ -140,7 +140,7 @@ export default function SleepChart({ data }) {
         color: '#e5e7eb',
       },
       tooltip: {
-        backgroundColor: '#1f2937', // Tailwind gray-800
+        backgroundColor: '#1f2937', 
         titleColor: '#f9fafb',
         bodyColor: '#f3f4f6',
         callbacks: {
@@ -163,13 +163,13 @@ export default function SleepChart({ data }) {
         title: {
           display: true,
           text: '%',
-          color: '#d1d5db', // Tailwind gray-300
+          color: '#d1d5db', 
         },
         ticks: {
           color: '#d1d5db',
         },
         grid: {
-          color: '#374151', // Tailwind gray-700
+          color: '#374151', 
         },
       },
       y2: {
@@ -212,7 +212,7 @@ export default function SleepChart({ data }) {
 
   return (
     <div className="mb-10">
-      <h2 className="text-xl font-semibold mb-4"> Sleep Trends</h2>
+      <h2 className="text-xl font-semibold mb-4">Sleep Trends</h2>
 
       <div className="flex flex-wrap gap-2 mb-8">
         {ranges.map((label) => (

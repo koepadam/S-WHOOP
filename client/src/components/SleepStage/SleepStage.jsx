@@ -137,13 +137,19 @@ export default function SleepStage({ data }) {
         },
       },
       y: {
-        stacked: true,
         beginAtZero: true,
-        ticks: { color: '#d1d5db' },
+        ticks: { 
+          color: '#d1d5db', 
+          stepSize: 60, 
+          callback: function (value) {
+            const hours = Math.floor(value/ 60); 
+            return `${hours}h`; 
+          }
+        },
         grid: { color: '#374151' },
         title: {
           display: true,
-          text: 'Minutes',
+          text: 'Sleep Duration',
           color: '#d1d5db',
         },
       },

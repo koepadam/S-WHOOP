@@ -48,7 +48,7 @@ export default function WorkoutRadar({ data }) {
       {
         label: 'Avg HR Zone %',
         data: averages,
-        backgroundColor: 'rgba(96, 165, 250, 0.2)', 
+        backgroundColor: 'rgba(96, 165, 250, 0.2)',
         borderColor: '#60a5fa',
         pointBackgroundColor: '#60a5fa',
         borderWidth: 2,
@@ -60,22 +60,35 @@ export default function WorkoutRadar({ data }) {
     responsive: true,
     scales: {
       r: {
-        angleLines: { display: true },
-        suggestedMin: 0,
-        suggestedMax: 40,
+        angleLines: { display: true, color: '#374151' },
+        grid: { color: '#374151' },
+        pointLabels: { color: '#d1d5db' },
         ticks: {
           stepSize: 20,
+          color: '#d1d5db',
+          backdropColor: 'transparent', 
           callback: (val) => `${val}%`,
         },
+        suggestedMin: 0,
+        suggestedMax: 40,
       },
     },
     plugins: {
-      legend: { position: 'top' },
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#e5e7eb',
+        },
+      },
       title: {
         display: true,
         text: 'Average HR Zone Profile',
+        color: '#e5e7eb',
       },
       tooltip: {
+        backgroundColor: '#1f2937',
+        titleColor: '#f9fafb',
+        bodyColor: '#f3f4f6',
         callbacks: {
           label: function (context) {
             const value = context.raw;
@@ -88,7 +101,9 @@ export default function WorkoutRadar({ data }) {
 
   return (
     <div className="mb-10">
-      <h2 className="text-xl font-semibold mb-4">HR Zone Radar</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+        Heart-Rate Zone Radar
+      </h2>
       <Radar data={chartData} options={options} />
     </div>
   );
