@@ -82,7 +82,7 @@ export default function RecoveryTrend({ data }) {
   const rhr = filtered.map((row) => Number(row['Resting heart rate (bpm)']) || 0);
   const consistency = filtered.map((row) => Number(row['Sleep consistency %']) || 0);
 
-  // ✅ Chart data
+  
   const chartData = {
     labels: dates,
     datasets: [
@@ -117,7 +117,7 @@ export default function RecoveryTrend({ data }) {
     ],
   };
 
-  // ✅ Chart options
+  
   const options = {
     responsive: true,
     plugins: {
