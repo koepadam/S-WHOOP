@@ -100,7 +100,7 @@ export default function SleepStage({ data }) {
       legend: {
         position: 'top',
         labels: {
-          color: '#e5e7eb', // Tailwind gray-200
+          color: '#e5e7eb', 
         },
       },
       title: {
@@ -109,7 +109,7 @@ export default function SleepStage({ data }) {
         color: '#e5e7eb',
       },
       tooltip: {
-        backgroundColor: '#1f2937', // Tailwind gray-800
+        backgroundColor: '#1f2937', 
         titleColor: '#f9fafb',
         bodyColor: '#f3f4f6',
         callbacks: {

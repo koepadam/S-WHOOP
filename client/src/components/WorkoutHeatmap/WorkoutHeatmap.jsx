@@ -13,7 +13,7 @@ import {
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 export default function WorkoutHeatmap({ data }) {
-  const [metric, setMetric] = useState('count'); // 'count', 'strain', 'calories'
+  const [metric, setMetric] = useState('count'); 
 
   const dayLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const counts = new Array(7).fill(0);
@@ -24,7 +24,7 @@ export default function WorkoutHeatmap({ data }) {
     const raw = row['Workout start time'];
     if (!raw) return;
     const date = new Date(raw);
-    const day = date.getDay(); // 0 = Sunday, 6 = Saturday
+    const day = date.getDay(); // sunday to sat
     counts[day]++;
     strainSums[day] += Number(row['Activity Strain']) || 0;
     calorieSums[day] += Number(row['Energy burned (cal)']) || 0;

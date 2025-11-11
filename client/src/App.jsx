@@ -9,7 +9,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import './App.css';
 
 function App() {
-  const [parsedData, setParsedData] = useState({}); // { filename: parsedRows }
+  const [parsedData, setParsedData] = useState({}); 
 
   const handleFolderSubmit = (files) => {
     files.forEach((file) => {
