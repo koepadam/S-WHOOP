@@ -196,7 +196,6 @@ export default function RecoveryTrend({ data }) {
     <div className="mb-10">
       <h2 className="text-xl font-semibold mb-4 text-gray-100">Recovery Trends</h2>
 
-      {/* ✅ Range and month selector */}
       <div className="flex flex-wrap gap-3 mb-8">
         <input
           type="month"
