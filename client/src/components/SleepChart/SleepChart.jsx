@@ -62,18 +62,12 @@ export default function SleepChart({ data }) {
     return date.toLocaleDateString('en-GB');
   });
 
-  const sleepScores = filtered.map(
-    (row) => Number(row['Sleep performance %']) 
+  const sleepScores = filtered.map((row) => Number(row['Sleep performance %']));
+  const asleepDurations = filtered.map((row) =>
+    Number(row['Asleep duration (min)'])
   );
-  const asleepDurations = filtered.map(
-    (row) => Number(row['Asleep duration (min)']) 
-  );
-  const efficiency = filtered.map(
-    (row) => Number(row['Sleep efficiency %']) 
-  );
-  const consistency = filtered.map(
-    (row) => Number(row['Sleep consistency %']) 
-  );
+  const efficiency = filtered.map((row) => Number(row['Sleep efficiency %']));
+  const consistency = filtered.map((row) => Number(row['Sleep consistency %']));
 
   const avgSleepDuration =
     asleepDurations.reduce((sum, val) => sum + val, 0) / asleepDurations.length;
@@ -134,14 +128,25 @@ export default function SleepChart({ data }) {
   const options = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Sleep Metrics Over Time' },
-      tooltip: { // ! used AI here for the tooltip information
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#e5e7eb', // Tailwind gray-200
+        },
+      },
+      title: {
+        display: true,
+        text: 'Sleep Metrics Over Time',
+        color: '#e5e7eb',
+      },
+      tooltip: {
+        backgroundColor: '#1f2937', // Tailwind gray-800
+        titleColor: '#f9fafb',
+        bodyColor: '#f3f4f6',
         callbacks: {
           label: function (tooltipItem) {
             const label = tooltipItem.dataset.label;
             const value = tooltipItem.raw;
-
             if (label === 'Total Sleep (min)') {
               return `${label}: ${formatMinutes(value)}`;
             } else {
@@ -155,18 +160,49 @@ export default function SleepChart({ data }) {
       y: {
         beginAtZero: true,
         max: 100,
-        title: { display: true, text: '%' },
+        title: {
+          display: true,
+          text: '%',
+          color: '#d1d5db', // Tailwind gray-300
+        },
+        ticks: {
+          color: '#d1d5db',
+        },
+        grid: {
+          color: '#374151', // Tailwind gray-700
+        },
       },
       y2: {
         beginAtZero: true,
         position: 'right',
-        title: { display: true, text: 'Sleep Duration' },
-        ticks: { 
+        title: {
+          display: true,
+          text: 'Sleep Duration',
+          color: '#d1d5db',
+        },
+        ticks: {
           stepSize: 60,
+          color: '#d1d5db',
           callback: function (value) {
             const hours = Math.floor(value / 60);
             return `${hours}h`;
           },
+        },
+        grid: {
+          drawOnChartArea: false,
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Date',
+          color: '#d1d5db',
+        },
+        ticks: {
+          color: '#d1d5db',
+        },
+        grid: {
+          color: '#374151',
         },
       },
     },
@@ -178,15 +214,15 @@ export default function SleepChart({ data }) {
     <div className="mb-10">
       <h2 className="text-xl font-semibold mb-4"> Sleep Trends</h2>
 
-      <div className="flex flex-wrap gap-3 mb-8">
+      <div className="flex flex-wrap gap-2 mb-8">
         {ranges.map((label) => (
           <button
             key={label}
             onClick={() => setRange(label)}
-            className={`px-5 py-1 rounded ${
+            className={`px-5 py-1 rounded transition-colors ${
               range === label
-                ? 'bg-indigo-500 text-white'
-                : 'bg-indigo-100 hover:bg-indigo-200'
+                ? 'bg-indigo-500 text-white ring-2 ring-indigo-300'
+                : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
             }`}
           >
             {label.toUpperCase()}

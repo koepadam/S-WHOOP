@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
-    <nav className="h-screen w-40 fixed top-0 left-0 z-50 flex flex-col border-r border-gray-700 shadow-lg">
+    <nav className="h-screen w-40 fixed top-0 left-0 z-50 flex flex-col border-r border-gray-200 bg-white shadow">
       <div className="p-6">
         <div className="flex justify-center mb-6">
           <img src={whoopLogo} alt="WHOOP logo" className="h-8" />

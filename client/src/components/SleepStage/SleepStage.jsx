@@ -19,8 +19,6 @@ ChartJS.register(
   Legend
 );
 
-
-
 export default function SleepStage({ data }) {
   const [range, setRange] = useState('1y');
 
@@ -64,9 +62,7 @@ export default function SleepStage({ data }) {
   const deep = filtered.map((row) => row['Deep (SWS) duration (min)']);
   const rem = filtered.map((row) => row['REM duration (min)']);
   const awake = filtered.map((row) => row['Awake duration (min)']);
-  const asleepDurations = filtered.map(
-    (row) => row['Asleep duration (min)']
-  );
+  const asleepDurations = filtered.map((row) => row['Asleep duration (min)']);
 
   const chartData = {
     labels: dates,
@@ -101,9 +97,21 @@ export default function SleepStage({ data }) {
   const options = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Sleep Stage Breakdown' },
-      tooltip: { // ! did use Ai here for the tooltip information showing specific sleep and total sleep
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#e5e7eb', // Tailwind gray-200
+        },
+      },
+      title: {
+        display: true,
+        text: 'Sleep Stage Breakdown',
+        color: '#e5e7eb',
+      },
+      tooltip: {
+        backgroundColor: '#1f2937', // Tailwind gray-800
+        titleColor: '#f9fafb',
+        bodyColor: '#f3f4f6',
         callbacks: {
           label: function (tooltipItem) {
             const value = tooltipItem.raw;
@@ -118,8 +126,27 @@ export default function SleepStage({ data }) {
       },
     },
     scales: {
-      x: { stacked: true },
-      y: { stacked: true, beginAtZero: true },
+      x: {
+        stacked: true,
+        ticks: { color: '#d1d5db' },
+        grid: { color: '#374151' },
+        title: {
+          display: true,
+          text: 'Date',
+          color: '#d1d5db',
+        },
+      },
+      y: {
+        stacked: true,
+        beginAtZero: true,
+        ticks: { color: '#d1d5db' },
+        grid: { color: '#374151' },
+        title: {
+          display: true,
+          text: 'Minutes',
+          color: '#d1d5db',
+        },
+      },
     },
   };
 
@@ -133,10 +160,10 @@ export default function SleepStage({ data }) {
           <button
             key={label}
             onClick={() => setRange(label)}
-            className={`px-3 py-1 rounded ${
+            className={`px-5 py-1 rounded transition-colors ${
               range === label
-                ? 'bg-indigo-500 text-white'
-                : 'bg-indigo-100 hover:bg-indigo-200'
+                ? 'bg-indigo-500 text-white ring-2 ring-indigo-300'
+                : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
             }`}
           >
             {label.toUpperCase()}
